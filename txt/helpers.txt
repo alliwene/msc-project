@@ -1,0 +1,558 @@
+﻿
+def plot_sig():
+  plt.grid()
+  ax.spines['left'].set_position('center')
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  ax.xaxis.set_ticks_position('bottom')
+  ax.yaxis.set_ticks_position('left')
+  xs = np.arange(-10, 10, 0.001)
+  plt.ylim([0.1,10])
+  plt.xlabel('$a$', size=12)
+  plt.ylabel('$\mathrm{L}(a,y)$', size=12)
+  # plt.title('Loss function', size=15)
+  plt.plot(sigmoid(xs), -np.log(sigmoid(xs)), label='$-\log(a)$')
+  plt.plot(sigmoid(xs), -np.log(1-sigmoid(xs)), label='$-\log(1-a)$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('loss.png')
+  
+plot_sig()
+
+
+
+def plot_sigmoid():
+  plt.grid()
+  ax.spines['left'].set_position(('data',0))
+  ax.spines['bottom'].set_position(('data',0))
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  plt.xlim([-10.0, 10.0])
+  plt.ylim([-0.1, 1.1])
+  xs = np.arange(-10, 10, 0.001)
+  plt.xlabel('$z$', size=12)
+  plt.ylabel('$\sigma(z)$', size=12)
+  # plt.title('Sigmoid function', size=18)
+  plt.plot(xs, sigmoid(xs), label=r'$\sigma(z)= \frac{1}{1+e^{-z}}$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('sigmoid.png')
+
+plot_sigmoid()
+
+sigmoid = lambda x: 1/(1+np.exp(-x))
+
+def plot_decision_boundary(X, y, w, b, path):
+   plt.grid()
+   plt.xlim([-2.0, 2.0])
+   plt.ylim([-2.0, 2.0])
+   plt.xlabel('$\mathbf{x}_1$', size=12)
+   plt.ylabel('$\mathbf{x}_2$', size=12)
+   # plt.title('Decision boundary', size = 18)
+
+   xs = np.array([-2.0, 2.0])
+   ys = (-w[0] * xs - b)/w[1]
+
+   plt.scatter(X[:,0], X[:,1], s=50, c=colormap[y])
+   plt.plot(xs, ys, c='black')
+   plt.savefig(path)
+
+plot_decision_boundary(X, y, w, b, 'boundary.png')
+
+
+
+plt.rcParams['animation.ffmpeg_path'] = 'C:\\bin\\ffmpeg.exe'
+
+X = np.array([[-0.1, 1.4],
+              [-0.5,-0.1],
+              [ 1.3, 0.9],
+              [-0.6, 0.4],
+              [-1.5, 0.4],
+              [ 0.2, 0.2],
+              [-0.3,-0.4],
+              [ 0.7,-0.8],
+              [ 1.1,-1.5],
+              [-1.0, 0.9],
+              [-0.5,-1.5],
+              [-1.3,-0.4],
+              [-1.4,-1.2],
+              [-0.9,-1.1],
+              [ 0.4,-1.3],
+              [-0.4, 0.6],
+              [ 0.3,-0.5]])
+
+f = lambda x,y: x**2 + y**2
+NX = 100
+NY = 100
+
+x1 = -3.2
+x2 = -3.2
+LEARNING_RATE = 0.1
+
+steps = []
+for i in range(21):
+  steps.append([x1, x2])
+  x1 = x1 - LEARNING_RATE * (2 * x1)
+  x2 = x2 - LEARNING_RATE * (2 * x2)
+
+steps = np.array(steps)
+
+xs = np.linspace(-4, 4, NX)
+ys = np.linspace(-4, 4, NY)
+xv, yv = np.meshgrid(xs, ys)
+
+zv = f(yv.flatten(), xv.flatten())
+
+plt.grid()
+fig = plt.figure()
+fig.suptitle('Some arbitrary function: $f(x_1,x_2) = x_1^2 + x_2^2$', fontsize=15)
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.set_xlabel('$x_1$', size=16)
+ax.set_ylabel('$x_2$', size=16)
+ax.plot_surface(xv, yv, zv.reshape(NX, NY), rstride=4, cstride=4, alpha=0.25)
+ax.view_init(55, 35)
+
+plt.xlim([-4, 4])
+plt.ylim([-4, 4])
+
+fig.tight_layout()
+
+def animate(i):
+  graph.set_offsets(steps[i,:])
+  graph.set_3d_properties([f(*steps[i,:])], zdir='z')
+  text_box.set_text('Iteration: {}'.format(i))
+  return graph, text_box
+
+graph = ax.scatter([], [], [], s=50, c='red')
+lines, = ax.plot([], [], [], c='red')
+
+text_box = ax.text(-4, 3, 500.0, 'Iteration 0', size = 16)
+
+anim = animation.FuncAnimation(fig, animate, 20, interval=50, blit=True)
+anim.save('animation.mp4', writer='avconv', fps=2, codec="libx264")
+
+
+sigmoid_prime = lambda y: sigmoid(y)*(1-sigmoid(y))
+
+def plot_sigmoid_prime():
+  plt.grid()
+  ax.spines['left'].set_position('center')
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  ax.xaxis.set_ticks_position('bottom')
+  ax.yaxis.set_ticks_position('left')
+  plt.xlim([-4.5, 4.5])
+  plt.ylim([0, 0.35])
+  xs = np.arange(-4, 4, 0.001)
+  plt.xlabel('$z$', size=12)
+  plt.ylabel('$\sigma\'(z)$', size=12)
+  # plt.title('Sigmoid function', size=18)
+  plt.plot(xs, sigmoid_prime(xs), label=r'$\sigma^{\prime}(z)=\sigma(z)[1-\sigma(z)]$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('sigmoid_prime.png')
+
+plot_sigmoid_prime()
+
+tanh = lambda z: 2*sigmoid(2*z) - 1 
+
+def plot_tanh():
+  plt.grid()
+  ax.spines['left'].set_position('center')
+  ax.spines['bottom'].set_position('center')
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  ax.xaxis.set_ticks_position('bottom')
+  ax.yaxis.set_ticks_position('left')
+  plt.xlim([-6, 6])
+  plt.ylim([-1.5, 1.5])
+  xs = np.arange(-10, 10, 0.001)
+  plt.xlabel('$z$', size=12)
+  # plt.ylabel('$tanh(z)$', size=12)
+  # plt.title('Sigmoid function', size=18)
+  plt.plot(xs, tanh(xs), label=r'$\tanh(z) = 2\sigma(2z) - 1$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('tanh.png')
+
+plot_tanh()
+
+
+
+def plot_tanhPrime():
+  plt.grid()
+  ax.spines['left'].set_position('center')
+  ax.spines['bottom'].set_position('center')
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  ax.xaxis.set_ticks_position('bottom')
+  ax.yaxis.set_ticks_position('left')
+  plt.xlim([-6, 6])
+  plt.ylim([-1.5, 1.5])
+  xs = np.arange(-10, 10, 0.001)
+  plt.xlabel('$z$', size=12)
+  # plt.ylabel('$tanh(z)$', size=12)
+  # plt.title('Sigmoid function', size=18)
+  plt.plot(xs, tanh_prime(xs), label=r'$\tanh\'(z) = 1 - \tanh^2(z)$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('tanh_prime.png')
+
+plot_tanhPrime()
+
+
+
+def rectified(x):
+	return max(0.0, x)
+ 
+def plot_relu():
+    plt.grid()
+    ax.spines['left'].set_position('center')
+    # ax.spines['bottom'].set_position('center')
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
+    # define a series of inputs
+    series_in = [x for x in range(-10, 11)]
+    # calculate outputs for our inputs
+    series_out = [rectified(x) for x in series_in]
+    # line plot of raw inputs to rectified outputs
+    plt.plot(series_in, series_out, label=r'$h(z) = \max(0,z)$')
+    plt.xlabel('$z$', size=12)
+    plt.ylabel('$h(z)$', size=12)
+    # plt.title('Sigmoid function', size=18)
+    # plt.plot(xs, relu(xs), label=r'$\tanh\'(z) = 1 - \tanh^2(z)$')
+    plt.legend(loc='upper left', fontsize=12)
+    # plt.savefig('relu.png')
+  
+plot_relu()
+
+
+# rectified linear function
+def reluPrime(x):
+    x[x>=0] = 1
+    x[x<0] = 0
+    return x
+ 
+def plot_reluPrime():
+    plt.grid()
+    plt.xlim([-6, 6])
+    plt.ylim([-1.5, 1.5])
+    xs = np.arange(-10, 10, 0.001)
+    plt.xlabel('$z$', size=12)
+    plt.ylabel('$tanh(z)$', size=12)
+    # plt.title('Sigmoid function', size=18)
+    plt.plot(xs, reluPrime(xs), label=r'$\tanh(z) = 2\sigma(2z) - 1$')
+    plt.legend(loc='upper left', fontsize=12)
+    # plt.savefig('tanh.png')
+  
+plot_reluPrime()
+
+\begin{figure}[htb!]
+\def\layersep{3.5cm}
+\centering
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=green!50];
+    \tikzstyle{output neuron}=[neuron, fill=red!50];
+    \tikzstyle{annot} = [text width=4em, text centered]
+    % Draw the input layer nodes
+    \foreach \name / \y in {1,...,4}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+        \node[input neuron, pin=left:$\mathbf{x}_\y$] (I-\name) at (0,-\y) {};
+
+        % Draw the output layer node
+    \node[output neuron,pin={[pin edge={->}]right:$\hat{y}$}, right of=H-3] (O) {};
+
+    % Connect every node in the input layer with the output layer
+    \foreach \source in {1,...,4}
+        \path (I-\source) edge (O);
+
+    % Annotate the layers
+    %\node[annot,above of=H-1, node distance=1cm] (hl) {Hidden layer};
+    \node[annot,left of=hl] {Input layer};
+    \node[annot,right of=hl] {Output layer};
+\end{tikzpicture}
+\caption{Logistic regression sketch}
+\label{fig:log_reg}
+\end{figure}
+
+
+
+def relu_prime(x):
+    return 0 if x<0.0 else 1
+    
+def rectified(x):
+	return max(0.0, x)
+
+def leaky(x):
+	return x*0.1 if x<0 else x
+
+def elu(x,a=1):
+	return a*(np.exp(x)-1) if x<= 0 else x
+
+def softplus(x):
+	return np.log(1+np.exp(x))
+ 
+def plot_compare():
+    plt.grid()
+    ax.spines['left'].set_position(('data',0))
+    ax.spines['bottom'].set_position(('data',0))
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    # define a series of inputs
+    plt.xlim([-4, 3])
+    plt.ylim([-2, 2])
+    series_in = [x for x in np.arange(-10, 10, 0.001)]
+    # calculate outputs for our inputs
+    relu_out = [rectified(x) for x in series_in]
+    leaky_out = [leaky(x) for x in series_in]
+    elu_out = [elu(x) for x in series_in]
+    softplus_out = [softplus(x) for x in series_in]
+    rprime_out = [relu_prime(x) for x in series_in]
+    # line plot of raw inputs to rectified outputs
+    plt.plot(series_in, relu_out, label=r'ReLU')
+    plt.plot(series_in, leaky_out, label=r'Leaky ReLU')
+    plt.plot(series_in, elu_out, label=r'ELU')
+    plt.plot(series_in, softplus_out, label=r'Softplus')
+    #plt.plot(series_in, rprime_out)
+    plt.legend(loc='upper left', fontsize=12)
+    plt.savefig('compare.png')
+  
+plot_compare()
+
+def plot_swish():
+  plt.grid()
+  ax.spines['left'].set_position(('data',0))
+  ax.spines['bottom'].set_position(('data',0))
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  plt.xlim([-6, 3])
+  plt.ylim([-1, 3])
+  xs = np.arange(-10, 10, 0.001)
+  #plt.xlabel('$z$', size=12)
+  #plt.ylabel('$\sigma(z)$', size=12)
+  # plt.title('Sigmoid function', size=18)
+  plt.plot(xs, swish(xs), label=r'$\varphi(z)= z\sigma(z)$')
+  plt.legend(loc='upper left', fontsize=12)
+  plt.savefig('swish.png')
+
+plot_swish()
+
+
+swishPrime = lambda x: swish(x) + sigmoid(x)*(1-swish(x))
+ 
+def plot_swishPrime():
+  plt.grid()
+  ax.spines['left'].set_position(('data',0))
+  ax.spines['bottom'].set_position(('data',0))
+  ax.spines['right'].set_color('none')
+  ax.spines['top'].set_color('none')
+  plt.xlim([-8, 8])
+  plt.ylim([-0.2, 1.3])
+  xs = np.arange(-10, 10, 0.001)
+  #plt.xlabel('$z$', size=12)
+  #plt.ylabel('$\sigma(z)$', size=12)
+  plt.plot(xs, swishPrime(xs), label=r'$\varphi^{\prime}(z)	=\varphi(z)+\sigma(z)(1-\varphi(z))$')
+  plt.legend(loc='upper left', fontsize=12)
+  # plt.savefig('swish_prime.png')
+
+plot_swishPrime()
+
+
+
+The sum of an organism’s observable characteristics is their phenotype. A key difference between phenotype and genotype is that, wh
+ilst genotype is inherited from an organism’s parents, the phenotype is not.
+Whilst a phenotype is influenced the genotype, genotype does not equal phenotype. The ph
+enotype is influenced by the genotype and factors including:
+Epigenetic modifications
+Environmental and lifestyle factors
+
+
+Yann LeCun, Yoshua Bengio, and Georey Hinton. Deep learning. Nature, 521(7553):
+436{444, 2015.
+
+@article{0483bd9444a348c8b59d54a190839ec9,
+title = "Deep learning",
+author = "Yann LeCun and Yoshua Bengio and Geoffrey Hinton",
+year = "2015",
+month = "5",
+day = "27",
+doi = "10.1038/nature14539",
+language = "English (US)",
+volume = "521",
+pages = "436--444",
+journal = "Nature Cell Biology",
+issn = "1465-7392",
+publisher = "Nature Publishing Group",
+number = "7553",
+}
+
+LSTM: A Search Space Odyssey
+Klaus Greff, Rupesh K. Srivastava, Jan Koutn´ık, Bas R. Steunebrink, J¨urgen Schmidhuber
+
+@article{journals/corr/GreffSKSS15,
+  added-at = {2018-05-23T21:20:42.000+0200},
+  author = {Greff, Klaus and Srivastava, Rupesh Kumar and Koutník, Jan and Steunebrink, Bas R. and Schmidhuber, Jürgen},
+  biburl = {https://www.bibsonomy.org/bibtex/23be3021a2dc9fcffa1b5e5e69b4d5cfe/dallmann},
+  ee = {http://arxiv.org/abs/1503.04069},
+  interhash = {68644741a66e3fa841b62bb4e637f4c7},
+  intrahash = {3be3021a2dc9fcffa1b5e5e69b4d5cfe},
+  journal = {CoRR},
+  keywords = {deep_learning lstm mlnlp rnn},
+  timestamp = {2018-05-23T21:20:42.000+0200},
+  title = {LSTM: A Search Space Odyssey.},
+  url = {http://dblp.uni-trier.de/db/journals/corr/corr1503.html#GreffSKSS15},
+  volume = {abs/1503.04069},
+  year = 2015
+}
+
+
+Sepp Hochreiter and J¨urgen Schmidhuber. Long Short-
+Term Memory. Neural Computation, 9(8):1735–1780,
+November 1997. ISSN 0899-7667. 
+
+@article{10.1162/neco.1997.9.8.1735,
+ author = {Hochreiter, Sepp and Schmidhuber, J\"{u}rgen},
+ title = {Long Short-Term Memory},
+ year = {1997},
+ issue_date = {November 1997},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+ volume = {9},
+ number = {8},
+ issn = {0899-7667},
+ url = {https://doi.org/10.1162/neco.1997.9.8.1735},
+ doi = {10.1162/neco.1997.9.8.1735},
+ journal = {Neural Comput.},
+ month = nov,
+ pages = {1735–1780},
+ numpages = {46}
+}
+
+
+Alex Graves and J¨urgen Schmidhuber. Framewise
+phoneme classification with bidirectional LSTM and other
+neural network architectures. Neural Networks, 18(5–6):
+602–610, July 2005. ISSN 0893-6080. doi: 10.1016/j.
+neunet.2005.06.042. Current 
+
+@article{Graves2005FramewisePC,
+  title={Framewise phoneme classification with bidirectional LSTM and other neural network architectures},
+  author={Alex Graves and J{\"u}rgen Schmidhuber},
+  journal={Neural networks : the official journal of the International Neural Network Society},
+  year={2005},
+  volume={18 5-6},
+  pages={602-10}
+}
+
+@InProceedings{10.1007/3-540-59497-3_175,
+author="Han, Jun
+and Moraga, Claudio",
+editor="Mira, Jos{\'e} and Sandoval, Francisco",
+title="The influence of the sigmoid function parameters on the speed of backpropagation learning",
+booktitle="From Natural to Artificial Neural Computation",
+year="1995",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="195--201",
+isbn="978-3-540-49288-7"
+}
+
+
+@inbook{bb72cefb6cc34854965b753d1ce10cbd,
+title = "Generalization and network design strategies",
+author = "Yann Lecun",
+year = "1989",
+language = "English (US)",
+editor = "R. Pfeifer and Z. Schreter and F. Fogelman and L. Steels",
+booktitle = "Connectionism in perspective",
+publisher = "Elsevier",
+}
+ 
+accession plant/seed sample, variety or population held in a genebank or breeding program for conservation and use
+ 
+A. X. Wang, C. Tran, N. Desai, D. Lobell, and S. Ermon, “Deep
+transfer learning for crop yield prediction with remote sensing data,”
+in Proceedings of the 1st ACM SIGCAS Conference on Computing and
+Sustainable Societies. ACM, 2018, p. 50.
+
+
+
+Mohanty SP, Hughes DP, Salathe´ M. Using deep learning for
+image-based plant disease detection. Front. Plant Sci
+2016;7..
+[90] Sladojevic S, Arsenovic M, Anderla A, Culibrk D, Stefanovic
+D. Deep neural networks based recognition of plant diseases
+by leaf image classification. Comput Intell Neurosci
+2016;2016:1–11.
+ 
+ One epoch corresponds to n/b iterations of training.
+This constitutes a single pass over the dataset, assuming the dataset is sampled without replacement.
+
+for file_name in src_files:
+    full_file_name = os.path.join(dest, file_name)
+    if os.path.isfile(full_file_name):
+      try:
+        shutil.copy(full_file_name, dest)
+      except shutil.SameFileError:
+        i = 0
+        for count, filename in ldseg: 
+          dst = "Peace" + str(count) + ".JPG"
+          src = data+ filename 
+          dst = data+ dst 
+          os.rename(src, dst) 
+          i += 1
+        pass
+      else:
+        shutil.copy(full_file_name, dest)
+        pass
+      finally:
+        shutil.copy(full_file_name, dest)
+ 
+
+\begin{equation}
+\begin{aligned}
+&\text { Accuracy }=\frac{\sum_{i=1}^{m} \frac{t p_{i}+t n_{i}}{t p_{i}+f p_{i}+f n_{i}+t n_{i}}}{m}\\
+&\text { Precision }_{\text {Weighted }}=\frac{\sum_{i=1}^{m}\left|y_{i}\right| \frac{t p_{i}}{t p_{i}+f p_{i}}}{\sum_{i}^{m}\left|y_{i}\right|}\\
+&\text { Recall }_{\text {Weighted }}=\frac{\sum_{i=1}^{m}\left|y_{i}\right| \frac{t p_{i}}{t p_{i}+f n_{i}}}{\sum_{i}^{m}\left|y_{i}\right|}\\
+&F 1-\text { Score }_{\text {Weighted }}=\frac{\sum_{1}^{m}\left|y_{i}\right| \frac{2 t p_{i}}{2 t p_{i}+f p_{i}+f n_{i}}}{\sum_{i}^{m}\left|y_{i}\right|}
+\end{aligned}
+\end{equation}
+
+
+
+base model: tomato yellow leaf, tomato bacterial spot, 86
+	    ('Tomato___healthy', 'Apple___Apple_scab', 42)
+	    tomato late blight, potato late blight 8
+
+resnext50: [('Tomato___healthy', 'Apple___Apple_scab', 45),
+	   ('Apple___Apple_scab', 'Tomato___healthy', 8),
+	   ('Peach___healthy', 'Potato___healthy', 7)]
+
+vgg 16: [('Tomato___healthy', 'Apple___Apple_scab', 45),
+	('Apple___Apple_scab', 'Tomato___healthy', 8),
+	('Peach___healthy', 'Potato___healthy', 7)]
+
+
+
+
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{A A A A}
+\toprule
+ & \text{Activation Shape}\; & \text{Activation Size}\; & \text{Number of parameters}\; \\ \midrule
+ 
+\text{Input}  							  & 32 \times 32 \times 3  & 3,072 & 0  \\
+\text{CONV1 } (c_i=8,\; h=5, \; s=1)      & 28 \times 28 \times 8  & 6,272 & 608  \\
+\text{POOL1}   					          & 14 \times 14 \times 8  & 1,568 & 0 \\
+\text{CONV2 } (c_i=16,\; h=5, \; s=1)     & 10 \times 10 \times 16 & 1,600 & 3,216  \\ 
+\text{POOL2}   					          & 5 \times 5 \times 16   & 400   & 0 \\
+\text{FC1}   					          & 120 \times 1  		   & 120   & 48,120 \\
+\text{FC2}   					          & 84 \times 1            & 84    & 10,164 \\
+\text{Softmax}   					      & 10 \times 1            & 10    & 850 \\ \bottomrule
+\end{tabular}
+\caption{Simple CNN architecture showing number of parameters for each layer}
+\label{tab:no_parameters}
+\end{table} \noindent
+Table \ref{tab:no_parameters} shows the number of parameters with corresponding activation shapes and sizes for different layers of a CNN. The number of parameters for convolutional layers and fully connected layers is gotten using $((h \times h \times c_{i-1}) + b) \times c_{i}$ and $(W \times x + b)$ respectively, where $W$ is the kernel weight 

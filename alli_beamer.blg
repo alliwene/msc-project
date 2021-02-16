@@ -1,0 +1,63 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: alli_beamer.aux
+Reallocating 'name_of_file' (item size: 1) to 8 items.
+Reallocating 'name_of_file' (item size: 1) to 8 items.
+The style file: apacite.bst
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: alliref.bib
+Reallocating 'field_info' (item size: 4) to 10040 items.
+apacite.bst [2013/07/21 v6.03 APA bibliography style]
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--`others' not consistent with 6th ed. of the APA Manual
+Warning--No journal in krizhevsky2009learning
+You've used 105 entries,
+            6951 wiz_defined-function locations,
+            1934 strings with 32789 characters,
+and the built_in function-call counts, 223166 in all, are:
+= -- 27630
+> -- 2221
+< -- 10379
++ -- 10694
+- -- 221
+* -- 14077
+:= -- 39030
+add.period$ -- 473
+call.type$ -- 105
+change.case$ -- 1871
+chr.to.int$ -- 0
+cite$ -- 211
+duplicate$ -- 6522
+empty$ -- 8644
+format.name$ -- 3650
+if$ -- 42752
+int.to.chr$ -- 0
+int.to.str$ -- 319
+missing$ -- 0
+newline$ -- 2846
+num.names$ -- 852
+pop$ -- 4101
+preamble$ -- 1
+purify$ -- 466
+quote$ -- 0
+skip$ -- 14528
+stack$ -- 0
+substring$ -- 11971
+swap$ -- 3702
+text.length$ -- 482
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 10384
+warning$ -- 3
+while$ -- 1324
+width$ -- 0
+write$ -- 3706
+(There were 3 warnings)
