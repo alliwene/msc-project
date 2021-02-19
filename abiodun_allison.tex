@@ -105,7 +105,7 @@ Dedicated to Mulikat Allison.
 
 I give all glory, honour and adoration to Almighty Allah who brought me to this stage of my life. I owe a million debt of gratitude to my ever-loving parents, Mr Jamiu Allison and Mrs Mulikat Allison for their relentless supports toward the success of my education. I also appreciate my ever loving siblings for their continuous support.
 
-Also my profound appreciation goes to my supervisor, Professor G.O.S. Ekhaguere, for his patience, guidance and helpful suggestions, thank you sir. In the same vein, my unmeasured gratitude goes to all the distinguished Professors and members of the Department of Mathematics for their unrelenting effort. I also acknowledge my friends and my course mates for their love and support, I say thank you all.
+Also my profound appreciation goes to my supervisor, Professor G.O.S. Ekhaguere, for his patience, guidance and helpful suggestions, thank you sir. In the same vein, my unmeasured gratitude goes to all the distinguished Professors and members of staff of the Department of Mathematics for their unrelenting effort. I also acknowledge my friends and my course mates for their love and support, I say thank you all.
 
 %My special thanks goes to the Head of Department, Dr. Deborah Ajayi for her support, advice and tolerance towards the students of the mathematics department.
 
@@ -199,8 +199,7 @@ The norm function is used to measure the size of vectors in machine learning. Fo
 \end{equation} 
 for $p\in\mathbb{R}$, $p\geq 1$.
 
-Norms, including the $L^p$ norm, are functions mapping vectors to non-negative
-values. On an intuitive level, the norm of a vector $\bm{x}$ measures the distance from the origin to the point $\bm{x}$. A norm is a map $\|.\|:\bm{X}\rightarrow \mathbb{R}^+$ that satisfies the following properties:
+Norms, including the $L^p$ norm, are functions mapping vectors to non-negative real numbers. On an intuitive level, the norm of a vector $\bm{x}$ measures the distance from the origin to the point $\bm{x}$. A norm is a map $\|.\|:\bm{X}\rightarrow \mathbb{R}^+$ that satisfies the following properties:
 \begin{itemize}
 \item $\|x\| \geq 0, \quad \forall\;\bm{x}\in\bm{X} \quad$ (non-negativity)
 \item $\|\bm{x}\| = 0$ if and only if $\bm{x}=0$
@@ -225,7 +224,7 @@ of deep learning, the most common way to do this is with the {Frobenius norm}:
 \begin{equation}\label{eqn:fro-norm}
 \|\bm{A}\|_F = \sqrt{\sum_{i,j} A_{i,j}^2}
 \end{equation} 
-which is analogous to the $L^2$ norm of a vector.
+which is analogous to the $L^2$ norm of a vector, where $\bm{A}$ is a matrix and $A_{i,j}$ are values of $\bm{A}$.
 
 \subsection{Convex Optimisation}
 Consider the general {constrained} optimisation problem 
@@ -244,7 +243,7 @@ Let $\bm{x}_0 \in D \subseteq \mathbb{R}^n$ and $f:D \rightarrow \mathbb{R}$ suc
 \begin{defn} 
 \normalfont
 (Local minimum).
-Let $\bm{x}_0 \in D \subseteq \mathbb{R}^n$ and $f:D \rightarrow \mathbb{R}$ with $D \neq \emptyset$. If $f(\bm{x}) \geq f(\bm{x}_0) \;  \forall \; \bm{x} \in D \cap \mathcal{B}_{\bm{x}_0}(\varepsilon),\; \varepsilon>0$, then point $\bm{x}_0$ is called a local minimum point. ($\mathcal{B}_{\bm{x}_0}(\varepsilon) = \| \bm{x}-\bm{x}_0<\varepsilon\|$)
+Let $\bm{x}_0 \in D \subseteq \mathbb{R}^n$ and $f:D \rightarrow \mathbb{R}$ with $D \neq \emptyset$. If $f(\bm{x}) \geq f(\bm{x}_0) \;  \forall \; \bm{x} \in D \cap \mathcal{B}_{\bm{x}_0}(\varepsilon),\; \varepsilon>0$, then point $\bm{x}_0$ is called a local minimum point. ($\mathcal{B}_{\bm{x}_0}(\varepsilon) = \{ \bm{x} \in \mathbb{R}^n: \| \bm{x}-\bm{x}_0<\varepsilon\|\}$)
 \end{defn}
 \begin{defn} 
 \normalfont
@@ -384,7 +383,7 @@ f(\bm{y})  \geq  f(\bm{x}) + \nabla^T f(\bm{x}) (\bm{y}-\bm{x})
 \end{thm}
 \begin{thm}\label{thm:second_order}
 \normalfont {(Second order condition).}
-Let $f:\mathbb{R}^n\rightarrow \mathbb{R}$. If $f\in C^2(dom \; f)$, then $f$ is convex if and only if for every $\bm{x}\in\mathbb{R}^n$, the Hessian matrix $\nabla^2 f(\bm{x})$ positive semi-definite.
+Let $f:\mathbb{R}^n\rightarrow \mathbb{R}$. If $f\in C^2(dom \; f)$, then $f$ is convex if and only if for every $\bm{x}\in\mathbb{R}^n$, the Hessian matrix $\nabla^2 f(\bm{x})$ is positive semi-definite.
 \end{thm}
 
 \subsection{Rate of Convergence}
